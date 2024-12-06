@@ -14,7 +14,7 @@ sudo sh get-docker.sh
 
 **For Kubernetes Tools:** kubelet, kubeadm, and kubectl
 ```bash
-curl -fsSL https://raw.githubusercontent.com/CL0001/kubernetes-local-lab-setup/refs/heads/main/get-k8s.sh -0 get-k8s.sh
+curl -fsSL https://raw.githubusercontent.com/CL0001/kubernetes-local-lab-setup/refs/heads/main/get-k8s.sh -o get-k8s.sh
 sudo sh get-k8s.sh
 ```
 

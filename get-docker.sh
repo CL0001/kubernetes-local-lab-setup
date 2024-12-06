@@ -5,7 +5,7 @@ for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker c
 
 # Add Docker's official GPG key:
 sudo apt-get update
-sudo apt-get install ca-certificates curl
+sudo apt-get install ca-certificates curl -y
 sudo install -m 0755 -d /etc/apt/keyrings
 sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
 sudo chmod a+r /etc/apt/keyrings/docker.asc
@@ -25,20 +25,17 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin 
 
 
 # Docker CRI installation
+sudo apt-get install -y git golang-go
 
-# Install go to be able to run the CRI
-sudo apt-get install wget
-wget https://go.dev/dl/go1.23.4.linux-amd64.tar.gz
-sudo tar -C /usr/local -xzf go1.23.4.linux-amd64.tar.gz
-echo "export PATH=$PATH:/usr/local/go/bin" >>~/.profile
-source ~/.profile
-
+git clone https://github.com/Mirantis/cri-dockerd.git
 cd cri-dockerd
 mkdir bin
 go build -o bin/cri-dockerd
-mkdir -p /usr/local/bin
+
 sudo install -o root -g root -m 0755 cri-dockerd /usr/local/bin/cri-dockerd
 sudo install packaging/systemd/* /etc/systemd/system
-sed -i -e 's,/usr/bin/cri-dockerd,/usr/local/bin/cri-dockerd,' /etc/systemd/system/cri-docker.service
+sudo sed -i -e 's,/usr/bin/cri-dockerd,/usr/local/bin/cri-dockerd,' /etc/systemd/system/cri-docker.service
+
 systemctl daemon-reload
 systemctl enable --now cri-docker.socket
+sudo systemctl status cri-docker.socket

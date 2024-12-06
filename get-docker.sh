@@ -32,10 +32,12 @@ cd cri-dockerd
 mkdir bin
 go build -o bin/cri-dockerd
 
+cd bin
 sudo install -o root -g root -m 0755 cri-dockerd /usr/local/bin/cri-dockerd
+cd ..
 sudo install packaging/systemd/* /etc/systemd/system
 sudo sed -i -e 's,/usr/bin/cri-dockerd,/usr/local/bin/cri-dockerd,' /etc/systemd/system/cri-docker.service
 
-systemctl daemon-reload
-systemctl enable --now cri-docker.socket
+sudo systemctl daemon-reload
+sudo systemctl enable --now cri-docker.socket
 sudo systemctl status cri-docker.socket
